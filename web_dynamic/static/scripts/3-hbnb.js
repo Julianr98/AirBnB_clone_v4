@@ -1,4 +1,5 @@
 let amenities = []
+const url1 = 'http://0.0.0.0:5001/api/v1/';
 function one_array(amenities) {
         $('.amenities H4').text(amenities.join(', '))
 }
@@ -31,6 +32,14 @@ function init() {
     .fail(function (error) {
     $('DIV#api_status').removeClass('available')
     });
+
+    $.ajax({ url1: url })
+        .done(function(data) {
+
+        })
+
+
+
 }
 
 
