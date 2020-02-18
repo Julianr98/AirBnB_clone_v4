@@ -100,11 +100,11 @@ function init () {
         const html = htmlPlace(data[i]);
         $('SECTION.places').append(html);
         // each object of the class
-        console.log(data[i]);
-        console.log(html);
+        // console.log(data[i]);
+        // console.log(html);
       }
       // all classes
-      console.log(data);
+      // console.log(data);
     });
 
   $('SECTION.filters button').click(search);
