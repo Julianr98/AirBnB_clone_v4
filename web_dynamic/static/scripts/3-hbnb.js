@@ -1,19 +1,19 @@
-let amenities = []
+const amenities = [];
 const url = 'http://0.0.0.0:5001/api/v1';
 
-function htmlPlace(place) {
-    // template
-    const htmlstring =  [
+function htmlPlace (place) {
+  // template
+  const htmlstring = [
     '<article>',
     '<div class="title">',
         `<h2>${place.name}<h2>`,
-    '<div class="price_by_night">',
+        '<div class="price_by_night">',
         `${place.price_by_night}`,
-    '</div>',
-    '</div>',
-    '<div class="information">',
-    '<div class="max_guest">',
-    '<i class="fa fa-users fa-3x" aria-hidden="true"></i>',
+        '</div>',
+        '</div>',
+        '<div class="information">',
+        '<div class="max_guest">',
+        '<i class="fa fa-users fa-3x" aria-hidden="true"></i>',
         '<br />',
         `${place.number_rooms} Bedrooms`,
         '</div>',
@@ -27,67 +27,55 @@ function htmlPlace(place) {
         '<strong>Owner</strong>',
         '</div>',
         '<div class="description">',
-        `${ place.description}`,
-    ].join('');
+        `${place.description}`
+  ].join('');
 
-    return htmlstring;
-
+  return htmlstring;
 }
 
-
-function one_array(amenities) {
-        $('.amenities H4').text(amenities.join(', '))
+function oneArray (amenities) {
+  $('.amenities H4').text(amenities.join(', '));
 }
 
-function deleteThis(data, list) {
-    for (let i = 0; i < list.length; i++) {
-        if (list[i] === data) {
-            list.splice(i, 1)
-        }
+function deleteThis (data, list) {
+  for (let i = 0; i < list.length; i++) {
+    if (list[i] === data) {
+      list.splice(i, 1);
     }
+  }
 }
 
+function init () {
+  $('.amenities input').on('change', function () {
+    const checkObject = $(this)[0].checked;
+    if (checkObject === true) {
+      amenities.push($(this).data('name'));
+    } else {
+      deleteThis($(this).data('name'), amenities);
+    }
+    oneArray(amenities);
+  });
 
-function init() {
-    $('.amenities input').on('change', function(){
-    let check_object = $(this)[0].checked
-        if (check_object === true){
-            amenities.push($(this).data('name'))
-        } else {
-            deleteThis($(this).data('name'), amenities)
-        }
-        one_array(amenities)
-    })
-
-    $.ajax({ url: url + '/status/' })
+  $.ajax({ url: url + '/status/' })
     .done(function (data) {
-        $('DIV#api_status').addClass('available')
+      $('DIV#api_status').addClass('available');
     })
-    .fail(function (error) {
-    $('DIV#api_status').removeClass('available')
+    .fail(function (jqXHR, textStatus, errorThrown) {
+      $('DIV#api_status').removeClass('available');
     });
 
-    $.ajax({
-        type: "POST",
-        contentType: "application/json",
-        url: url + "/places_search",
-        data: '{}'
-    })
-        .done(function(data) {
-
-            for (let i=0; i < data.length; i++) {
-                // <section class="places"> in the html
-                $('SECTION.places').append(htmlPlace(data[i]));
-
-            }
-        })
-
-
-
-
+  $.ajax({
+    type: 'POST',
+    contentType: 'application/json',
+    url: url + '/places_search',
+    data: '{}'
+  })
+    .done(function (data) {
+      for (let i = 0; i < data.length; i++) {
+        // <section class="places"> in the html
+        $('SECTION.places').append(htmlPlace(data[i]));
+      }
+    });
 }
 
-
-$(document).ready(init)
-
-
+$(document).ready(init);
